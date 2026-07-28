@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "apps/worldvs-api/src/server.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["**/*.ts"]
+      }
+    },
+    {
+      "src": "apps/worldvs-web/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/apps/worldvs-api/src/server.ts"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/apps/worldvs-web/$1"
+    }
+  ]
+}
