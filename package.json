@@ -4,10 +4,10 @@
   "scripts": {
     "dev:api": "pnpm --filter worldvs-api dev",
     "dev:web": "pnpm --filter worldvs-web dev",
-    "dev": "pnpm run dev:api & pnpm run dev:web",
+    "dev": "pnpm --parallel --filter worldvs-api --filter worldvs-web run dev",
     "build": "pnpm --filter worldvs-api build && pnpm --filter worldvs-web build",
-    "db:migrate": "pnpm --filter worldvs-api tsx src/scripts/migrate.ts",
-    "db:seed": "pnpm --filter worldvs-api tsx src/scripts/seed.ts"
+    "db:migrate": "pnpm --filter worldvs-api exec tsx src/scripts/migrate.ts",
+    "db:seed": "pnpm --filter worldvs-api exec tsx src/scripts/seed.ts"
   },
   "devDependencies": {
     "typescript": "^5.7.0"
