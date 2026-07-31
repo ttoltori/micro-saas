@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createApiClient } from "@/lib/api";
 import type { Country } from "@worldvs/api-contracts";
+import { CountryName } from "@/components/country-name";
 
 export default function ComparePage() {
   const [countries, setCountries] = useState<Country[]>([]);
@@ -74,9 +75,14 @@ export default function ComparePage() {
                         : "border-white/10 hover:border-white/30"
                   }`}
                 >
-                  <div className="text-2xl mb-1">{c.flagEmoji}</div>
-                  <div className="text-sm font-medium">{c.nameKo}</div>
-                  <div className="text-xs text-white/40">{c.code}</div>
+                  <CountryName
+                    code={c.code}
+                    name={c.nameKo}
+                    className="justify-center"
+                    flagClassName="w-7 h-5 rounded object-cover"
+                    nameClassName="text-sm font-medium"
+                  />
+                  <div className="text-xs text-white/40 mt-1">{c.code}</div>
                 </button>
               );
             })}
@@ -87,16 +93,30 @@ export default function ComparePage() {
       <div className="flex items-center justify-center gap-4">
         <div className="text-center">
           <p className="text-sm text-white/40 mb-1">좌측</p>
-          <p className="text-lg font-bold">
-            {leftCode ? countries.find((c) => c.code === leftCode)?.nameKo : "선택하세요"}
-          </p>
+          {leftCode ? (
+            <CountryName
+              code={leftCode}
+              name={countries.find((c) => c.code === leftCode)?.nameKo ?? ""}
+              className="text-lg font-bold"
+              flagClassName="w-7 h-5 rounded object-cover"
+            />
+          ) : (
+            <p className="text-lg font-bold">선택하세요</p>
+          )}
         </div>
         <span className="text-2xl text-white/40">VS</span>
         <div className="text-center">
           <p className="text-sm text-white/40 mb-1">우측</p>
-          <p className="text-lg font-bold">
-            {rightCode ? countries.find((c) => c.code === rightCode)?.nameKo : "선택하세요"}
-          </p>
+          {rightCode ? (
+            <CountryName
+              code={rightCode}
+              name={countries.find((c) => c.code === rightCode)?.nameKo ?? ""}
+              className="text-lg font-bold"
+              flagClassName="w-7 h-5 rounded object-cover"
+            />
+          ) : (
+            <p className="text-lg font-bold">선택하세요</p>
+          )}
         </div>
       </div>
 

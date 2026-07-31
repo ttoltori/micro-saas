@@ -1,4 +1,5 @@
 import { createApiClient } from "@/lib/api";
+import { Flag } from "@/components/flag";
 
 export default async function LeaderboardPage() {
   const client = createApiClient();
@@ -52,8 +53,10 @@ export default async function LeaderboardPage() {
                   </td>
                   <td className="p-4 font-semibold">{entry.playerName}</td>
                   <td className="p-4">
-                    <span className="text-lg mr-1">{entry.nationalityFlagEmoji}</span>
-                    <span className="text-sm text-white/60">{entry.nationalityName}</span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Flag code={entry.nationalityCode} className="w-5 h-3.5 rounded-[2px] object-cover" />
+                      <span className="text-sm text-white/60">{entry.nationalityName}</span>
+                    </span>
                   </td>
                   <td className="p-4 text-right font-bold text-primary-400">{entry.score}</td>
                   <td className="p-4 text-right hidden sm:table-cell text-white/60">

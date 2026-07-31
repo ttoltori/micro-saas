@@ -1,5 +1,6 @@
 import { createApiClient } from "@/lib/api";
 import { notFound } from "next/navigation";
+import { CountryName } from "@/components/country-name";
 
 export default async function CompareResultPage({
   params,
@@ -29,8 +30,12 @@ export default async function CompareResultPage({
       <div className="text-center py-8">
         <div className="flex items-center justify-center gap-8">
           <div className="text-center">
-            <div className="text-6xl mb-2">{leftCountry.flagEmoji}</div>
-            <h1 className="text-2xl font-bold">{leftCountry.nameKo}</h1>
+            <CountryName
+              code={leftCountry.code}
+              name={leftCountry.nameKo}
+              className="text-2xl font-bold justify-center"
+              flagClassName="w-12 h-8 rounded object-cover"
+            />
             <div className="flex gap-2 mt-2 justify-center flex-wrap">
               {badges.left.map((b, i) => (
                 <span key={i} className="text-xs bg-white/10 rounded-full px-2 py-1">
@@ -41,8 +46,12 @@ export default async function CompareResultPage({
           </div>
           <span className="text-3xl text-white/30">VS</span>
           <div className="text-center">
-            <div className="text-6xl mb-2">{rightCountry.flagEmoji}</div>
-            <h1 className="text-2xl font-bold">{rightCountry.nameKo}</h1>
+            <CountryName
+              code={rightCountry.code}
+              name={rightCountry.nameKo}
+              className="text-2xl font-bold justify-center"
+              flagClassName="w-12 h-8 rounded object-cover"
+            />
             <div className="flex gap-2 mt-2 justify-center flex-wrap">
               {badges.right.map((b, i) => (
                 <span key={i} className="text-xs bg-white/10 rounded-full px-2 py-1">

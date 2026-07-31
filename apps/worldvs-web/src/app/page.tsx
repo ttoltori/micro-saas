@@ -1,4 +1,5 @@
 import { createApiClient } from "@/lib/api";
+import { CountryName } from "@/components/country-name";
 
 export default async function HomePage() {
   const client = createApiClient();
@@ -35,15 +36,19 @@ export default async function HomePage() {
             href={`/compare/${dailyCompare.leftCountryCode}/${dailyCompare.rightCountryCode}`}
             className="card flex items-center justify-between hover:bg-white/10 transition-colors"
           >
-            <div className="flex items-center gap-4">
-              <span className="text-4xl">{dailyCompare.leftFlagEmoji}</span>
-              <span className="text-xl font-semibold">{dailyCompare.leftCountryName}</span>
-            </div>
+            <CountryName
+              code={dailyCompare.leftCountryCode}
+              name={dailyCompare.leftCountryName}
+              className="text-xl font-semibold"
+              flagClassName="w-8 h-6 rounded object-cover"
+            />
             <span className="text-2xl text-white/40">VS</span>
-            <div className="flex items-center gap-4">
-              <span className="text-xl font-semibold">{dailyCompare.rightCountryName}</span>
-              <span className="text-4xl">{dailyCompare.rightFlagEmoji}</span>
-            </div>
+            <CountryName
+              code={dailyCompare.rightCountryCode}
+              name={dailyCompare.rightCountryName}
+              className="text-xl font-semibold"
+              flagClassName="w-8 h-6 rounded object-cover"
+            />
           </a>
         </section>
       )}
@@ -59,9 +64,9 @@ export default async function HomePage() {
                 className="card hover:bg-white/10 transition-colors"
               >
                 <div className="flex items-center justify-between">
-                  <span>{item.leftFlagEmoji} {item.leftCountryName}</span>
+                  <CountryName code={item.leftCountryCode} name={item.leftCountryName} />
                   <span className="text-white/40">VS</span>
-                  <span>{item.rightCountryName} {item.rightFlagEmoji}</span>
+                  <CountryName code={item.rightCountryCode} name={item.rightCountryName} />
                 </div>
                 <p className="text-sm text-white/40 mt-2">조회 {item.viewCount}회</p>
               </a>

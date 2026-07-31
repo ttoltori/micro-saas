@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { createApiClient } from "@/lib/api";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Country } from "@worldvs/api-contracts";
+import { Flag } from "@/components/flag";
 
 export default function LeaderboardRegisterPage() {
   return (
@@ -87,18 +88,23 @@ function RegisterForm() {
 
         <div>
           <label className="block text-sm text-white/60 mb-2">국적</label>
-          <select
-            value={nationalityCode}
-            onChange={(e) => setNationalityCode(e.target.value)}
-            className="w-full bg-white/10 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option value="">국가 선택</option>
-            {countries.map((c) => (
-              <option key={c.code} value={c.code} className="bg-slate-800">
-                {c.flagEmoji} {c.nameKo} ({c.code})
-              </option>
-            ))}
-          </select>
+          <div className="flex items-center gap-2">
+            {nationalityCode && (
+              <Flag code={nationalityCode} className="w-7 h-5 rounded object-cover shrink-0" />
+            )}
+            <select
+              value={nationalityCode}
+              onChange={(e) => setNationalityCode(e.target.value)}
+              className="w-full bg-white/10 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <option value="">국가 선택</option>
+              {countries.map((c) => (
+                <option key={c.code} value={c.code} className="bg-slate-800">
+                  {c.nameKo} ({c.code})
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {error && <p className="text-red-400 text-sm">{error}</p>}
