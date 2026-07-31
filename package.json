@@ -1,13 +1,13 @@
 {
-  "name": "worldvs-monorepo",
+  "name": "micro-saas-monorepo",
   "private": true,
   "scripts": {
-    "dev:api": "pnpm --filter worldvs-api dev",
-    "dev:web": "pnpm --filter worldvs-web dev",
-    "dev": "pnpm --parallel --filter worldvs-api --filter worldvs-web run dev",
-    "build": "pnpm --filter worldvs-api build && pnpm --filter worldvs-web build",
-    "db:migrate": "pnpm --filter worldvs-api exec tsx src/scripts/migrate.ts",
-    "db:seed": "pnpm --filter worldvs-api exec tsx src/scripts/seed.ts"
+    "dev:worldvs-api": "pnpm --filter worldvs-api dev",
+    "dev:worldvs-web": "pnpm --filter worldvs-web dev",
+    "dev:worldvs": "pnpm --parallel --filter worldvs-api --filter worldvs-web run dev",
+    "build:worldvs": "pnpm --filter worldvs-api build && pnpm --filter worldvs-web build",
+    "db:worldvs:migrate": "pnpm --filter worldvs-api exec tsx src/scripts/migrate.ts",
+    "db:worldvs:seed": "pnpm --filter worldvs-api exec tsx src/scripts/seed.ts"
   },
   "devDependencies": {
     "typescript": "^5.7.0"
