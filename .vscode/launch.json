@@ -1,0 +1,52 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "worldvs-api: debug",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--import", "tsx", "src/server.ts"],
+      "cwd": "${workspaceFolder}/apps/worldvs-api",
+      "envFile": "${workspaceFolder}/apps/worldvs-api/.env",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "worldvs-web: debug server-side",
+      "command": "pnpm --filter worldvs-web dev",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "worldvs-web: debug client-side",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceFolder}/apps/worldvs-web"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "worldvs-web: debug full stack",
+      "command": "pnpm --filter worldvs-web dev",
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome",
+        "webRoot": "${workspaceFolder}/apps/worldvs-web"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "worldvs: debug api + web",
+      "configurations": ["worldvs-api: debug", "worldvs-web: debug full stack"],
+      "stopAll": true
+    }
+  ]
+}

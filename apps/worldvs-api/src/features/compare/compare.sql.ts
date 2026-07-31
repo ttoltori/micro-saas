@@ -1,6 +1,7 @@
 import type { DatabaseClient } from "@worldvs/database";
-import { getCountry, type CountryRow } from "../country/country.sql.js";
+import { getCountry, toCountry, type CountryRow } from "../country/country.sql.js";
 import { listIndicators, type IndicatorRow } from "../indicator/indicator.sql.js";
+import type { Country } from "@worldvs/api-contracts";
 
 interface ValueRow {
   country_code: string;
@@ -49,8 +50,8 @@ interface ScoreSummary {
 }
 
 export interface CompareResult {
-  leftCountry: CountryRow;
-  rightCountry: CountryRow;
+  leftCountry: Country;
+  rightCountry: Country;
   results: CompareResultItem[];
   scoreSummary: ScoreSummary;
   badges: { left: Badge[]; right: Badge[] };
@@ -223,8 +224,8 @@ export async function getComparison(
   };
 
   return {
-    leftCountry: left,
-    rightCountry: right,
+    leftCountry: toCountry(left),
+    rightCountry: toCountry(right),
     results,
     scoreSummary,
     badges: {

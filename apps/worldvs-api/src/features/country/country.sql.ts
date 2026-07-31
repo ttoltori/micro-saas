@@ -1,4 +1,5 @@
 import type { DatabaseClient } from "@worldvs/database";
+import type { Country } from "@worldvs/api-contracts";
 
 export interface CountryRow {
   code: string;
@@ -11,6 +12,21 @@ export interface CountryRow {
   capital_en: string | null;
   region: string;
   subregion: string | null;
+}
+
+export function toCountry(row: CountryRow): Country {
+  return {
+    code: row.code,
+    iso3: row.iso3,
+    nameKo: row.name_ko,
+    nameEn: row.name_en,
+    nameJa: row.name_ja,
+    flagEmoji: row.flag_emoji,
+    capitalKo: row.capital_ko,
+    capitalEn: row.capital_en,
+    region: row.region,
+    subregion: row.subregion,
+  };
 }
 
 export async function listCountries(

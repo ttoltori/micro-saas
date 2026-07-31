@@ -2,12 +2,6 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "../project_m/worldvs"
-		},
-		{
-			"path": "../project_j/tube_digest"
 		}
 	],
 	"settings": {}
