@@ -28,48 +28,48 @@ export default async function CompareResultPage({
         <a href="/compare" className="text-base text-white/60 hover:text-white">← 국가 선택으로</a>
       </div>
 
-      <div className="text-center py-8">
-        <div className="flex items-center justify-center gap-8">
+      <div className="sticky top-14 z-40 -mx-4 px-4 py-3 backdrop-blur-md bg-black/30 border-b border-white/10">
+        <div className="flex items-center justify-center gap-6">
           <div className="text-center">
             <CountryName
               code={leftCountry.code}
               name={leftCountry.nameKo}
-              className="text-2xl font-bold justify-center"
-              flagClassName="w-12 h-8 rounded object-cover"
+              className="text-lg font-bold justify-center"
+              flagClassName="w-8 h-5 rounded object-cover"
             />
-            <div className="mt-2">
+            <div className="mt-1">
               <CountryChangeButton
                 side="left"
                 currentCode={leftCountry.code}
                 otherCode={rightCountry.code}
               />
             </div>
-            <div className="flex gap-2 mt-2 justify-center flex-wrap">
+            <div className="flex gap-1.5 mt-1.5 justify-center flex-wrap">
               {badges.left.map((b, i) => (
-                <span key={i} className="text-sm bg-white/10 rounded-full px-2.5 py-1">
+                <span key={i} className="text-xs bg-white/10 rounded-full px-2 py-0.5">
                   {b.emoji} {b.label}
                 </span>
               ))}
             </div>
           </div>
-          <span className="text-3xl text-white/40">VS</span>
+          <span className="text-2xl text-white/40">VS</span>
           <div className="text-center">
             <CountryName
               code={rightCountry.code}
               name={rightCountry.nameKo}
-              className="text-2xl font-bold justify-center"
-              flagClassName="w-12 h-8 rounded object-cover"
+              className="text-lg font-bold justify-center"
+              flagClassName="w-8 h-5 rounded object-cover"
             />
-            <div className="mt-2">
+            <div className="mt-1">
               <CountryChangeButton
                 side="right"
                 currentCode={rightCountry.code}
                 otherCode={leftCountry.code}
               />
             </div>
-            <div className="flex gap-2 mt-2 justify-center flex-wrap">
+            <div className="flex gap-1.5 mt-1.5 justify-center flex-wrap">
               {badges.right.map((b, i) => (
-                <span key={i} className="text-sm bg-white/10 rounded-full px-2.5 py-1">
+                <span key={i} className="text-xs bg-white/10 rounded-full px-2 py-0.5">
                   {b.emoji} {b.label}
                 </span>
               ))}
