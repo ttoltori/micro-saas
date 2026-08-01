@@ -13,6 +13,7 @@
     "@worldvs/worldvs-api-client": "workspace:*",
     "@worldvs/api-client-core": "workspace:*",
     "@worldvs/api-contracts": "workspace:*",
+    "@worldvs/i18n": "workspace:*",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

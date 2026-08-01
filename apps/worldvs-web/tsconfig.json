@@ -20,7 +20,8 @@
       ]
     },
     "types": [
-      "node"
+      "node",
+      "next"
     ],
     "allowJs": true,
     "noEmit": true,

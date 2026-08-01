@@ -1,7 +1,17 @@
 import { createApiClient } from "@/lib/api";
 import { CountryName } from "@/components/country-name";
+import { cookies, headers } from "next/headers";
+import { detectLanguage, LANGUAGE_COOKIE_NAME, createTranslate, type Language } from "@worldvs/i18n";
 
 export default async function HomePage() {
+  const cookieStore = await cookies();
+  const headerStore = await headers();
+  const cookieLang = cookieStore.get(LANGUAGE_COOKIE_NAME)?.value;
+  const ipCountry = headerStore.get("x-vercel-ip-country") ?? headerStore.get("cf-ipcountry");
+  const acceptLanguage = headerStore.get("accept-language");
+  const lang = detectLanguage({ cookie: cookieLang, ipCountry, acceptLanguage });
+  const t = createTranslate(lang as Language);
+
   const client = createApiClient();
 
   let dailyCompare = null;
@@ -21,17 +31,17 @@ export default async function HomePage() {
           <span className="text-primary-400">World</span> VS
         </h1>
         <p className="text-xl text-white/60 mb-8">
-          세계 국가를 한눈에 비교하고, 퀴즈로 학습하세요
+          {t("home.subtitle")}
         </p>
         <div className="flex gap-4 justify-center">
-          <a href="/compare" className="btn-primary">국가 비교하기</a>
-          <a href="/quiz" className="btn-secondary">퀴즈 풀기</a>
+          <a href="/compare" className="btn-primary">{t("home.compareButton")}</a>
+          <a href="/quiz" className="btn-secondary">{t("home.quizButton")}</a>
         </div>
       </section>
 
       {dailyCompare && (
         <section>
-          <h2 className="text-2xl font-bold mb-4">📅 오늘의 비교</h2>
+          <h2 className="text-2xl font-bold mb-4">{t("home.dailyCompare")}</h2>
           <a
             href={`/compare/${dailyCompare.leftCountryCode}/${dailyCompare.rightCountryCode}`}
             className="card flex items-center justify-between hover:bg-white/10 transition-colors"
@@ -55,7 +65,7 @@ export default async function HomePage() {
 
       {trending && trending.length > 0 && (
         <section>
-          <h2 className="text-2xl font-bold mb-4">🔥 인기 비교</h2>
+          <h2 className="text-2xl font-bold mb-4">{t("home.trending")}</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {trending.map((item, i) => (
               <a
@@ -68,7 +78,7 @@ export default async function HomePage() {
                   <span className="text-white/40">VS</span>
                   <CountryName code={item.rightCountryCode} name={item.rightCountryName} />
                 </div>
-                <p className="text-sm text-white/40 mt-2">조회 {item.viewCount}회</p>
+                <p className="text-sm text-white/40 mt-2">{t("home.views", { count: item.viewCount })}</p>
               </a>
             ))}
           </div>
@@ -78,18 +88,18 @@ export default async function HomePage() {
       <section className="grid gap-6 md:grid-cols-3">
         <div className="card text-center">
           <div className="text-4xl mb-3">📊</div>
-          <h3 className="text-lg font-bold mb-2">20개 지표 비교</h3>
-          <p className="text-sm text-white/50">인구, 경제, 군사, 문화, 환경 등 다양한 분야</p>
+          <h3 className="text-lg font-bold mb-2">{t("home.feature1Title")}</h3>
+          <p className="text-sm text-white/50">{t("home.feature1Desc")}</p>
         </div>
         <div className="card text-center">
           <div className="text-4xl mb-3">🧠</div>
-          <h3 className="text-lg font-bold mb-2">일일 퀴즈</h3>
-          <p className="text-sm text-white/50">10문항으로 세계 지식 테스트</p>
+          <h3 className="text-lg font-bold mb-2">{t("home.feature2Title")}</h3>
+          <p className="text-sm text-white/50">{t("home.feature2Desc")}</p>
         </div>
         <div className="card text-center">
           <div className="text-4xl mb-3">🏆</div>
-          <h3 className="text-lg font-bold mb-2">리더보드</h3>
-          <p className="text-sm text-white/50">상위 100명과 순위 경쟁</p>
+          <h3 className="text-lg font-bold mb-2">{t("home.feature3Title")}</h3>
+          <p className="text-sm text-white/50">{t("home.feature3Desc")}</p>
         </div>
       </section>
     </div>

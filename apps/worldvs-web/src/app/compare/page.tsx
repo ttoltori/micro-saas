@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { createApiClient } from "@/lib/api";
 import type { Country } from "@worldvs/api-contracts";
 import { CountryName } from "@/components/country-name";
+import { useT } from "@worldvs/i18n";
 
 export default function ComparePage() {
+  const t = useT();
   const [countries, setCountries] = useState<Country[]>([]);
   const [leftCode, setLeftCode] = useState("");
   const [rightCode, setRightCode] = useState("");
@@ -32,19 +34,19 @@ export default function ComparePage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">국가 비교</h1>
+      <h1 className="text-3xl font-bold">{t("compare.title")}</h1>
 
       <div className="card">
         <input
           type="text"
-          placeholder="국가 검색..."
+          placeholder={t("compare.searchPlaceholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full bg-white/10 rounded-xl px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-primary-500"
         />
 
         {loading ? (
-          <p className="text-white/40 text-center py-8">불러오는 중...</p>
+          <p className="text-white/40 text-center py-8">{t("compare.loading")}</p>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 max-h-96 overflow-y-auto">
             {filtered.map((c) => {
@@ -92,7 +94,7 @@ export default function ComparePage() {
 
       <div className="flex items-center justify-center gap-4">
         <div className="text-center">
-          <p className="text-sm text-white/40 mb-1">좌측</p>
+          <p className="text-sm text-white/40 mb-1">{t("compare.left")}</p>
           {leftCode ? (
             <CountryName
               code={leftCode}
@@ -101,12 +103,12 @@ export default function ComparePage() {
               flagClassName="w-7 h-5 rounded object-cover"
             />
           ) : (
-            <p className="text-lg font-bold">선택하세요</p>
+            <p className="text-lg font-bold">{t("compare.selectCountry")}</p>
           )}
         </div>
-        <span className="text-2xl text-white/40">VS</span>
+        <span className="text-2xl text-white/40">{t("compare.vs")}</span>
         <div className="text-center">
-          <p className="text-sm text-white/40 mb-1">우측</p>
+          <p className="text-sm text-white/40 mb-1">{t("compare.right")}</p>
           {rightCode ? (
             <CountryName
               code={rightCode}
@@ -115,7 +117,7 @@ export default function ComparePage() {
               flagClassName="w-7 h-5 rounded object-cover"
             />
           ) : (
-            <p className="text-lg font-bold">선택하세요</p>
+            <p className="text-lg font-bold">{t("compare.selectCountry")}</p>
           )}
         </div>
       </div>
@@ -123,7 +125,7 @@ export default function ComparePage() {
       {canCompare && (
         <div className="text-center">
           <a href={`/compare/${leftCode}/${rightCode}`} className="btn-primary inline-block">
-            비교 결과 보기 →
+            {t("compare.viewResult")}
           </a>
         </div>
       )}

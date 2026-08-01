@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import { createApiClient } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useT } from "@worldvs/i18n";
 
 export default function QuizHomePage() {
+  const t = useT();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -17,7 +19,7 @@ export default function QuizHomePage() {
       const session = await client.quiz.createSession({ mode: "DAILY_10" });
       router.push(`/quiz/play/${session.sessionId}`);
     } catch {
-      setError("퀴즈를 시작할 수 없습니다. 잠시 후 다시 시도해주세요.");
+      setError(t("quiz.startError"));
     } finally {
       setLoading(false);
     }
@@ -25,14 +27,14 @@ export default function QuizHomePage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">퀴즈</h1>
+      <h1 className="text-3xl font-bold">{t("quiz.title")}</h1>
 
       <div className="card text-center py-12">
         <div className="text-6xl mb-4">🧠</div>
-        <h2 className="text-2xl font-bold mb-2">일일 퀴즈</h2>
-        <p className="text-white/50 mb-6">10문항으로 세계 지식을 테스트하세요</p>
+        <h2 className="text-2xl font-bold mb-2">{t("quiz.dailyQuiz")}</h2>
+        <p className="text-white/50 mb-6">{t("quiz.dailyQuizDesc")}</p>
         <button onClick={startQuiz} disabled={loading} className="btn-primary">
-          {loading ? "시작 중..." : "퀴즈 시작하기"}
+          {loading ? t("quiz.starting") : t("quiz.start")}
         </button>
         {error && <p className="text-red-400 mt-4">{error}</p>}
       </div>
@@ -40,18 +42,18 @@ export default function QuizHomePage() {
       <div className="grid gap-4 md:grid-cols-3">
         <div className="card text-center">
           <div className="text-3xl mb-2">📊</div>
-          <h3 className="font-bold">10문항</h3>
-          <p className="text-sm text-white/40">OX 및 객관식</p>
+          <h3 className="font-bold">{t("quiz.feature1Title")}</h3>
+          <p className="text-sm text-white/40">{t("quiz.feature1Desc")}</p>
         </div>
         <div className="card text-center">
           <div className="text-3xl mb-2">⏱️</div>
-          <h3 className="font-bold">시간 측정</h3>
-          <p className="text-sm text-white/40">빠를수록 유리</p>
+          <h3 className="font-bold">{t("quiz.feature2Title")}</h3>
+          <p className="text-sm text-white/40">{t("quiz.feature2Desc")}</p>
         </div>
         <div className="card text-center">
           <div className="text-3xl mb-2">🏆</div>
-          <h3 className="font-bold">리더보드</h3>
-          <p className="text-sm text-white/40">상위 100명 등록</p>
+          <h3 className="font-bold">{t("quiz.feature3Title")}</h3>
+          <p className="text-sm text-white/40">{t("quiz.feature3Desc")}</p>
         </div>
       </div>
     </div>

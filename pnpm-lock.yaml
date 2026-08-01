@@ -60,6 +60,9 @@ importers:
       '@worldvs/api-contracts':
         specifier: workspace:*
         version: link:../../packages/api-contracts/worldvs
+      '@worldvs/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       '@worldvs/worldvs-api-client':
         specifier: workspace:*
         version: link:../../packages/worldvs-api-client
@@ -126,6 +129,22 @@ importers:
       '@types/pg':
         specifier: ^8.11.0
         version: 8.20.0
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
+
+  packages/i18n:
+    dependencies:
+      react:
+        specifier: ^19.0.0
+        version: 19.2.8
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.20.1
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.17
       typescript:
         specifier: ^5.7.0
         version: 5.9.3

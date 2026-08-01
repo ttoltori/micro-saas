@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { createApiClient } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useT } from "@worldvs/i18n";
 
 interface QuizQuestion {
   id: string;
@@ -47,6 +48,7 @@ export default function QuizPlayPage({
 }: {
   params: Promise<{ sessionId: string }>;
 }) {
+  const t = useT();
   const [session, setSession] = useState<QuizSession | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Array<{ questionId: string; selectedOptionId: string; durationMs: number }>>([]);
@@ -139,9 +141,9 @@ export default function QuizPlayPage({
     };
   }, []);
 
-  if (loading) return <div className="text-center py-16 text-white/40">불러오는 중...</div>;
+  if (loading) return <div className="text-center py-16 text-white/40">{t("common.loading")}</div>;
   if (error) return <div className="text-center py-16 text-red-400">{error}</div>;
-  if (!session) return <div className="text-center py-16 text-white/40">세션을 찾을 수 없습니다.</div>;
+  if (!session) return <div className="text-center py-16 text-white/40">{t("common.loading")}</div>;
 
   const question = session.questions[currentIndex];
   const progress = ((currentIndex + 1) / session.questions.length) * 100;
@@ -150,9 +152,9 @@ export default function QuizPlayPage({
     <div className="space-y-6 max-w-2xl mx-auto">
       <div className="flex items-center justify-between">
         <span className="text-sm text-white/40">
-          {currentIndex + 1} / {session.questions.length}
+          {t("quiz.progress", { current: currentIndex + 1, total: session.questions.length })}
         </span>
-        <a href="/quiz" className="text-sm text-white/40 hover:text-white">나가기</a>
+        <a href="/quiz" className="text-sm text-white/40 hover:text-white">{t("quiz.exit")}</a>
       </div>
 
       <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -187,7 +189,7 @@ export default function QuizPlayPage({
           ))}
         </div>
 
-        {submitting && <p className="text-center text-white/40 mt-4">제출 중...</p>}
+        {submitting && <p className="text-center text-white/40 mt-4">{t("quiz.submitting")}</p>}
       </div>
 
       <style>{`

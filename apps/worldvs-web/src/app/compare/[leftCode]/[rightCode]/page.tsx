@@ -2,6 +2,8 @@ import { createApiClient } from "@/lib/api";
 import { notFound } from "next/navigation";
 import { CountryName } from "@/components/country-name";
 import { CountryChangeButton } from "@/components/country-change-button";
+import { cookies, headers } from "next/headers";
+import { detectLanguage, LANGUAGE_COOKIE_NAME, createTranslate, type Language } from "@worldvs/i18n";
 
 export default async function CompareResultPage({
   params,
@@ -9,6 +11,14 @@ export default async function CompareResultPage({
   params: Promise<{ leftCode: string; rightCode: string }>;
 }) {
   const { leftCode, rightCode } = await params;
+  const cookieStore = await cookies();
+  const headerStore = await headers();
+  const cookieLang = cookieStore.get(LANGUAGE_COOKIE_NAME)?.value;
+  const ipCountry = headerStore.get("x-vercel-ip-country") ?? headerStore.get("cf-ipcountry");
+  const acceptLanguage = headerStore.get("accept-language");
+  const lang = detectLanguage({ cookie: cookieLang, ipCountry, acceptLanguage });
+  const t = createTranslate(lang as Language);
+
   const client = createApiClient();
 
   let comparison = null;
@@ -25,7 +35,7 @@ export default async function CompareResultPage({
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <a href="/compare" className="text-base text-white/60 hover:text-white">← 국가 선택으로</a>
+        <a href="/compare" className="text-base text-white/60 hover:text-white">{t("compare.backToSelect")}</a>
       </div>
 
       <div className="text-center py-8">
@@ -52,7 +62,7 @@ export default async function CompareResultPage({
               ))}
             </div>
           </div>
-          <span className="text-3xl text-white/40">VS</span>
+          <span className="text-3xl text-white/40">{t("compare.vs")}</span>
           <div className="text-center">
             <CountryName
               code={rightCountry.code}
@@ -83,15 +93,15 @@ export default async function CompareResultPage({
         <div className="flex justify-center gap-8 mt-4">
           <div>
             <span className="text-3xl font-bold text-primary-400">{scoreSummary.leftWins}</span>
-            <span className="text-base text-white/60 ml-1">승</span>
+            <span className="text-base text-white/60 ml-1">{t("compare.wins")}</span>
           </div>
           <div>
             <span className="text-3xl font-bold text-white/50">{scoreSummary.draws}</span>
-            <span className="text-base text-white/60 ml-1">무</span>
+            <span className="text-base text-white/60 ml-1">{t("compare.draws")}</span>
           </div>
           <div>
             <span className="text-3xl font-bold text-red-400">{scoreSummary.rightWins}</span>
-            <span className="text-base text-white/60 ml-1">승</span>
+            <span className="text-base text-white/60 ml-1">{t("compare.wins")}</span>
           </div>
         </div>
       </div>
@@ -113,7 +123,7 @@ export default async function CompareResultPage({
                         : "bg-white/10 text-white/50"
                   }`}
                 >
-                  {item.winner === "LEFT" ? `${leftCountry.nameKo} 승` : item.winner === "RIGHT" ? `${rightCountry.nameKo} 승` : item.winner === "DRAW" ? "무승부" : "데이터 없음"}
+                  {item.winner === "LEFT" ? t("compare.leftWins", { country: leftCountry.nameKo }) : item.winner === "RIGHT" ? t("compare.rightWins", { country: rightCountry.nameKo }) : item.winner === "DRAW" ? t("compare.draw") : t("compare.dataNone")}
                 </span>
               </div>
             </div>
@@ -160,7 +170,7 @@ export default async function CompareResultPage({
             )}
 
             <p className="text-base text-white/60 mt-2">{item.summaryText}</p>
-            <p className="text-sm text-white/40 mt-1">출처: {item.leftValue?.sourceName ?? item.rightValue?.sourceName ?? item.indicator.sourceName}</p>
+            <p className="text-sm text-white/40 mt-1">{t("compare.source")}: {item.leftValue?.sourceName ?? item.rightValue?.sourceName ?? item.indicator.sourceName}</p>
           </div>
         ))}
       </div>

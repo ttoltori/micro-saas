@@ -5,6 +5,7 @@ import { createApiClient } from "@/lib/api";
 import type { Country } from "@worldvs/api-contracts";
 import { CountryName } from "./country-name";
 import { useRouter } from "next/navigation";
+import { useT } from "@worldvs/i18n";
 
 interface CountryChangeButtonProps {
   side: "left" | "right";
@@ -17,6 +18,7 @@ export function CountryChangeButton({
   currentCode,
   otherCode,
 }: CountryChangeButtonProps) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [countries, setCountries] = useState<Country[]>([]);
   const [search, setSearch] = useState("");
@@ -65,7 +67,7 @@ export function CountryChangeButton({
         onClick={() => setOpen(true)}
         className="text-sm text-white/60 hover:text-white underline underline-offset-2 transition-colors"
       >
-        나라 변경
+        {t("compare.changeCountry")}
       </button>
 
       {open && (
@@ -78,18 +80,18 @@ export function CountryChangeButton({
             className="bg-[#15151f] rounded-2xl border border-white/15 p-6 w-full max-w-lg max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-bold mb-4">국가 선택</h3>
+            <h3 className="text-lg font-bold mb-4">{t("compare.countrySelect")}</h3>
 
             <input
               type="text"
-              placeholder="국가 검색..."
+              placeholder={t("compare.searchCountry")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-white/10 rounded-xl px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-primary-500 text-base"
             />
 
             {loading ? (
-              <p className="text-white/50 text-center py-8">불러오는 중...</p>
+              <p className="text-white/50 text-center py-8">{t("compare.loading")}</p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto flex-1">
                 {filtered.map((c) => (
@@ -121,7 +123,7 @@ export function CountryChangeButton({
               onClick={() => setOpen(false)}
               className="mt-4 text-sm text-white/50 hover:text-white transition-colors"
             >
-              닫기
+              {t("compare.close")}
             </button>
           </div>
         </div>
