@@ -4,6 +4,7 @@ import {
   getLeaderboard,
   checkEligibility,
   submitScore,
+  getPotentialRank,
 } from "../features/leaderboard/leaderboard.sql.js";
 import { success, error } from "../utils/response.js";
 import { AppError, errorCodes, notFound } from "../errors/error-codes.js";
@@ -22,6 +23,14 @@ export function createLeaderboardRoutes(db: DatabaseClient) {
     const durationSeconds = parseInt(c.req.query("durationSeconds") ?? "0", 10);
 
     const result = await checkEligibility(db, score, durationSeconds);
+    return success(c, result);
+  });
+
+  router.get("/rank", async (c) => {
+    const score = parseInt(c.req.query("score") ?? "0", 10);
+    const durationSeconds = parseInt(c.req.query("durationSeconds") ?? "0", 10);
+
+    const result = await getPotentialRank(db, score, durationSeconds);
     return success(c, result);
   });
 

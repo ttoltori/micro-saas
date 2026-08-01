@@ -377,6 +377,24 @@ export async function getQuizResult(
   );
   const explanationMap = new Map(questionsResult.rows.map((q) => [q.id, q.explanation_ko ?? ""]));
 
+  const eligibilityResult = await db.query<{ count: string }>(
+    `SELECT COUNT(*) as count FROM worldvs.leaderboard`,
+  );
+  const totalEntries = parseInt(eligibilityResult.rows[0].count, 10);
+  let eligible = false;
+
+  if (totalEntries < 100) {
+    eligible = true;
+  } else {
+    const minResult = await db.query<{ score: number; duration_seconds: number }>(
+      `SELECT score, duration_seconds FROM worldvs.leaderboard ORDER BY score DESC, duration_seconds ASC, created_at ASC LIMIT 100`,
+    );
+    if (minResult.rows.length >= 100) {
+      const minEntry = minResult.rows[99];
+      eligible = r.score > minEntry.score || (r.score === minEntry.score && r.duration_seconds < minEntry.duration_seconds);
+    }
+  }
+
   return {
     resultId: r.id,
     score: r.score,
@@ -392,6 +410,6 @@ export async function getQuizResult(
       isCorrect: l.is_correct,
       explanation: explanationMap.get(l.question_id) ?? "",
     })),
-    leaderboardEligible: false,
+    leaderboardEligible: eligible,
   };
 }

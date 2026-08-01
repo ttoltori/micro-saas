@@ -129,6 +129,13 @@ export function createWorldVsClient(config: ApiClientConfig) {
         }>(config, "GET", "/v1/leaderboard/eligibility", {
           query: { score, durationSeconds },
         }),
+      getRank: (score: number, durationSeconds: number) =>
+        httpRequest<{ rank: number; totalEntries: number }>(
+          config,
+          "GET",
+          "/v1/leaderboard/rank",
+          { query: { score, durationSeconds } },
+        ),
       submitScore: (req: SubmitScoreRequest) =>
         httpRequest<{
           rank: number;

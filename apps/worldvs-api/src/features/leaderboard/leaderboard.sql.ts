@@ -98,6 +98,28 @@ export async function checkEligibility(
   };
 }
 
+export async function getPotentialRank(
+  db: DatabaseClient,
+  score: number,
+  durationSeconds: number,
+): Promise<{ rank: number; totalEntries: number }> {
+  const countResult = await db.query<{ count: string }>(
+    `SELECT COUNT(*) as count FROM worldvs.leaderboard`,
+  );
+  const totalEntries = parseInt(countResult.rows[0].count, 10);
+
+  const rankResult = await db.query<{ rank: string }>(
+    `SELECT COUNT(*) + 1 as rank FROM worldvs.leaderboard
+     WHERE score > $1 OR (score = $1 AND duration_seconds < $2)`,
+    [score, durationSeconds],
+  );
+
+  return {
+    rank: parseInt(rankResult.rows[0].rank, 10),
+    totalEntries,
+  };
+}
+
 export async function submitScore(
   db: DatabaseClient,
   params: { resultId: string; playerName: string; nationalityCode: string; deviceId?: string },
