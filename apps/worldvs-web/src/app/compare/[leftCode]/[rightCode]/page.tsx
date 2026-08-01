@@ -1,6 +1,7 @@
 import { createApiClient } from "@/lib/api";
 import { notFound } from "next/navigation";
 import { CountryName } from "@/components/country-name";
+import { CountryChangeButton } from "@/components/country-change-button";
 
 export default async function CompareResultPage({
   params,
@@ -24,7 +25,7 @@ export default async function CompareResultPage({
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <a href="/compare" className="text-sm text-white/40 hover:text-white">← 국가 선택으로</a>
+        <a href="/compare" className="text-base text-white/60 hover:text-white">← 국가 선택으로</a>
       </div>
 
       <div className="text-center py-8">
@@ -36,15 +37,22 @@ export default async function CompareResultPage({
               className="text-2xl font-bold justify-center"
               flagClassName="w-12 h-8 rounded object-cover"
             />
+            <div className="mt-2">
+              <CountryChangeButton
+                side="left"
+                currentCode={leftCountry.code}
+                otherCode={rightCountry.code}
+              />
+            </div>
             <div className="flex gap-2 mt-2 justify-center flex-wrap">
               {badges.left.map((b, i) => (
-                <span key={i} className="text-xs bg-white/10 rounded-full px-2 py-1">
+                <span key={i} className="text-sm bg-white/10 rounded-full px-2.5 py-1">
                   {b.emoji} {b.label}
                 </span>
               ))}
             </div>
           </div>
-          <span className="text-3xl text-white/30">VS</span>
+          <span className="text-3xl text-white/40">VS</span>
           <div className="text-center">
             <CountryName
               code={rightCountry.code}
@@ -52,9 +60,16 @@ export default async function CompareResultPage({
               className="text-2xl font-bold justify-center"
               flagClassName="w-12 h-8 rounded object-cover"
             />
+            <div className="mt-2">
+              <CountryChangeButton
+                side="right"
+                currentCode={rightCountry.code}
+                otherCode={leftCountry.code}
+              />
+            </div>
             <div className="flex gap-2 mt-2 justify-center flex-wrap">
               {badges.right.map((b, i) => (
-                <span key={i} className="text-xs bg-white/10 rounded-full px-2 py-1">
+                <span key={i} className="text-sm bg-white/10 rounded-full px-2.5 py-1">
                   {b.emoji} {b.label}
                 </span>
               ))}
@@ -64,19 +79,19 @@ export default async function CompareResultPage({
       </div>
 
       <div className="card text-center">
-        <p className="text-lg">{scoreSummary.summaryText}</p>
+        <p className="text-xl">{scoreSummary.summaryText}</p>
         <div className="flex justify-center gap-8 mt-4">
           <div>
-            <span className="text-2xl font-bold text-primary-400">{scoreSummary.leftWins}</span>
-            <span className="text-sm text-white/40 ml-1">승</span>
+            <span className="text-3xl font-bold text-primary-400">{scoreSummary.leftWins}</span>
+            <span className="text-base text-white/60 ml-1">승</span>
           </div>
           <div>
-            <span className="text-2xl font-bold text-white/40">{scoreSummary.draws}</span>
-            <span className="text-sm text-white/40 ml-1">무</span>
+            <span className="text-3xl font-bold text-white/50">{scoreSummary.draws}</span>
+            <span className="text-base text-white/60 ml-1">무</span>
           </div>
           <div>
-            <span className="text-2xl font-bold text-red-400">{scoreSummary.rightWins}</span>
-            <span className="text-sm text-white/40 ml-1">승</span>
+            <span className="text-3xl font-bold text-red-400">{scoreSummary.rightWins}</span>
+            <span className="text-base text-white/60 ml-1">승</span>
           </div>
         </div>
       </div>
@@ -84,34 +99,34 @@ export default async function CompareResultPage({
       <div className="space-y-4">
         {results.map((item, idx) => (
           <div key={idx} className="card">
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <span className="text-xs text-white/40 mr-2">{item.indicator.category}</span>
-                <span className="font-semibold">{item.indicator.nameKo}</span>
-                <span className="text-xs text-white/40 ml-2">({item.indicator.unit})</span>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm text-white/50">{item.indicator.category}</span>
+                <span className="text-lg font-semibold">{item.indicator.nameKo}</span>
+                <span className="text-sm text-white/50">({item.indicator.unit})</span>
+                <span
+                  className={`text-sm px-2.5 py-0.5 rounded-full ${
+                    item.winner === "LEFT"
+                      ? "bg-primary-500/20 text-primary-300"
+                      : item.winner === "RIGHT"
+                        ? "bg-red-500/20 text-red-300"
+                        : "bg-white/10 text-white/50"
+                  }`}
+                >
+                  {item.winner === "LEFT" ? `${leftCountry.nameKo} 승` : item.winner === "RIGHT" ? `${rightCountry.nameKo} 승` : item.winner === "DRAW" ? "무승부" : "데이터 없음"}
+                </span>
               </div>
-              <span
-                className={`text-xs px-2 py-1 rounded-full ${
-                  item.winner === "LEFT"
-                    ? "bg-primary-500/20 text-primary-300"
-                    : item.winner === "RIGHT"
-                      ? "bg-red-500/20 text-red-300"
-                      : "bg-white/10 text-white/40"
-                }`}
-              >
-                {item.winner === "LEFT" ? `${leftCountry.nameKo} 승` : item.winner === "RIGHT" ? `${rightCountry.nameKo} 승` : item.winner === "DRAW" ? "무승부" : "데이터 없음"}
-              </span>
             </div>
 
             {item.indicator.displayType !== "TEXT" && (
               <div className="flex items-center gap-4 mb-2">
                 <div className="flex-1 text-right">
-                  <span className="text-lg font-bold">
+                  <span className="text-xl font-bold">
                     {item.leftValue?.value != null ? formatValue(item.leftValue.value, item.indicator.displayType, item.indicator.decimalPlaces) : "—"}
                   </span>
                 </div>
                 <div className="flex-1">
-                  <span className="text-lg font-bold">
+                  <span className="text-xl font-bold">
                     {item.rightValue?.value != null ? formatValue(item.rightValue.value, item.indicator.displayType, item.indicator.decimalPlaces) : "—"}
                   </span>
                 </div>
@@ -119,15 +134,15 @@ export default async function CompareResultPage({
             )}
 
             {item.indicator.displayType !== "TEXT" && (
-              <div className="flex items-center gap-2">
-                <div className="flex-1">
-                  <div className="gauge-bar">
-                    <div className="gauge-fill bg-primary-500" style={{ width: `${item.leftGauge}%` }} />
+              <div className="flex items-center gap-1">
+                <div className="flex-1 flex justify-end">
+                  <div className="gauge-bar w-full" style={{ transform: "scaleX(-1)" }}>
+                    <div className="gauge-fill bg-primary-500" style={{ width: `${Math.min(item.leftGauge, 92)}%` }} />
                   </div>
                 </div>
-                <div className="flex-1">
-                  <div className="gauge-bar">
-                    <div className="gauge-fill bg-red-500" style={{ width: `${item.rightGauge}%` }} />
+                <div className="flex-1 flex justify-start">
+                  <div className="gauge-bar w-full">
+                    <div className="gauge-fill bg-red-500" style={{ width: `${Math.min(item.rightGauge, 92)}%` }} />
                   </div>
                 </div>
               </div>
@@ -136,16 +151,16 @@ export default async function CompareResultPage({
             {item.indicator.displayType === "TEXT" && (
               <div className="flex items-center gap-4 mb-2">
                 <div className="flex-1 text-right">
-                  <span className="text-lg font-bold">{item.leftValue?.textValue ?? "—"}</span>
+                  <span className="text-xl font-bold">{item.leftValue?.textValue ?? "—"}</span>
                 </div>
                 <div className="flex-1">
-                  <span className="text-lg font-bold">{item.rightValue?.textValue ?? "—"}</span>
+                  <span className="text-xl font-bold">{item.rightValue?.textValue ?? "—"}</span>
                 </div>
               </div>
             )}
 
-            <p className="text-sm text-white/50 mt-2">{item.summaryText}</p>
-            <p className="text-xs text-white/30 mt-1">출처: {item.leftValue?.sourceName ?? item.rightValue?.sourceName ?? item.indicator.sourceName}</p>
+            <p className="text-base text-white/60 mt-2">{item.summaryText}</p>
+            <p className="text-sm text-white/40 mt-1">출처: {item.leftValue?.sourceName ?? item.rightValue?.sourceName ?? item.indicator.sourceName}</p>
           </div>
         ))}
       </div>
