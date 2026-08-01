@@ -103,6 +103,13 @@ export function createWorldVsClient(config: ApiClientConfig) {
           "GET",
           `/v1/quiz/results/${resultId}`,
         ),
+      checkAnswer: (sessionId: string, questionId: string, selectedOptionId: string) =>
+        httpRequest<{ isCorrect: boolean; correctOptionId: string }>(
+          config,
+          "POST",
+          `/v1/quiz/sessions/${sessionId}/check`,
+          { body: { questionId, selectedOptionId } },
+        ),
     },
 
     leaderboard: {

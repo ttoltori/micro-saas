@@ -5,6 +5,7 @@ import {
   getQuizSession,
   submitQuizResult,
   getQuizResult,
+  checkAnswer,
 } from "../features/quiz/quiz.sql.js";
 import { success, error } from "../utils/response.js";
 import { AppError, errorCodes, notFound } from "../errors/error-codes.js";
@@ -63,6 +64,23 @@ export function createQuizRoutes(db: DatabaseClient) {
       if (msg === "QUIZ_SESSION_ALREADY_SUBMITTED") {
         return error(c, new AppError(errorCodes.QUIZ_SESSION_ALREADY_SUBMITTED, "이미 제출된 퀴즈 세션입니다.", 400));
       }
+      return error(c, new AppError(errorCodes.INTERNAL_ERROR, msg, 500));
+    }
+  });
+
+  router.post("/sessions/:sessionId/check", async (c) => {
+    const sessionId = c.req.param("sessionId");
+    const body = await c.req.json();
+
+    if (!body.questionId || !body.selectedOptionId) {
+      return error(c, new AppError(errorCodes.VALIDATION_ERROR, "questionId와 selectedOptionId가 필요합니다.", 400));
+    }
+
+    try {
+      const result = await checkAnswer(db, sessionId, body.questionId, body.selectedOptionId);
+      return success(c, result);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Unknown error";
       return error(c, new AppError(errorCodes.INTERNAL_ERROR, msg, 500));
     }
   });

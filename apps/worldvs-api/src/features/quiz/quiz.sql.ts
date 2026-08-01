@@ -317,6 +317,24 @@ export async function submitQuizResult(
   };
 }
 
+export async function checkAnswer(
+  db: DatabaseClient,
+  sessionId: string,
+  questionId: string,
+  selectedOptionId: string,
+): Promise<{ isCorrect: boolean; correctOptionId: string }> {
+  const result = await db.query<{ correct_option_id: string }>(
+    `SELECT correct_option_id FROM worldvs.quiz_questions WHERE id = $1`,
+    [questionId],
+  );
+  if (result.rows.length === 0) throw new Error("QUESTION_NOT_FOUND");
+  const correctOptionId = result.rows[0].correct_option_id;
+  return {
+    isCorrect: selectedOptionId === correctOptionId,
+    correctOptionId,
+  };
+}
+
 export async function getQuizResult(
   db: DatabaseClient,
   resultId: string,
